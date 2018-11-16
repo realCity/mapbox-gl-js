@@ -7,14 +7,24 @@ import browser from '../../util/browser';
 import { Event } from '../../util/evented';
 import assert from 'assert';
 
-import type Map from '../map';
+import type Map, { MapOptions } from '../map';
 import type Point from '@mapbox/point-geometry';
 import type {TaskID} from '../../util/task_queue';
 
-const inertiaLinearity = 0.3,
-    inertiaEasing = bezier(0, 0, inertiaLinearity, 1),
-    inertiaMaxSpeed = 1400, // px/s
-    inertiaDeceleration = 2500; // px/s^2
+export type DragPanOptions = {
+    /** Maximum speed (in pixel per seconds) of the inertial motion after the drag has ended */
+    inertiaMaxSpeed: number,
+    /** Amount of speed loss per seconds after the drag has ended */
+    inertiaDeceleration: number
+}
+
+const defaultOptions: DragPanOptions = {
+    inertiaMaxSpeed: 1400,
+    inertiaDeceleration: 2500
+};
+
+const inertiaLinearity = 0.3;
+const inertiaEasing = bezier(0, 0, inertiaLinearity, 1);
 
 /**
  * The `DragPanHandler` allows the user to pan the map by clicking and dragging
@@ -32,17 +42,19 @@ class DragPanHandler {
     _inertia: Array<[number, Point]>;
     _frameId: ?TaskID;
     _clickTolerance: number;
+    _inertiaMaxSpeed: number;
+    _inertiaDeceleration: number;
 
     /**
      * @private
      */
-    constructor(map: Map, options: {
-        clickTolerance?: number
-    }) {
+    constructor(map: Map, { clickTolerance = 1, dragPanOptions = defaultOptions }: MapOptions & { clickTolerance: number }) {
         this._map = map;
         this._el = map.getCanvasContainer();
         this._state = 'disabled';
-        this._clickTolerance = options.clickTolerance || 1;
+        this._clickTolerance = clickTolerance;
+        this._inertiaMaxSpeed = dragPanOptions.inertiaMaxSpeed;
+        this._inertiaDeceleration = dragPanOptions.inertiaDeceleration;
 
         bindAll([
             '_onMove',
@@ -295,12 +307,12 @@ class DragPanHandler {
         const velocity = flingOffset.mult(inertiaLinearity / flingDuration);
         let speed = velocity.mag(); // px/s
 
-        if (speed > inertiaMaxSpeed) {
-            speed = inertiaMaxSpeed;
+        if (speed > this._inertiaMaxSpeed) {
+            speed = this._inertiaMaxSpeed;
             velocity._unit()._mult(speed);
         }
 
-        const duration = speed / (inertiaDeceleration * inertiaLinearity),
+        const duration = speed / (this._inertiaDeceleration * inertiaLinearity),
             offset = velocity.mult(-duration / 2);
 
         this._map.panBy(offset, {

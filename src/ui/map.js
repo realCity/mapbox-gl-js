@@ -39,7 +39,7 @@ import type {StyleImageInterface} from '../style/style_image';
 import type ScrollZoomHandler from './handler/scroll_zoom';
 import type BoxZoomHandler from './handler/box_zoom';
 import type DragRotateHandler from './handler/drag_rotate';
-import type DragPanHandler from './handler/drag_pan';
+import type DragPanHandler, {DragPanOptions} from './handler/drag_pan';
 import type KeyboardHandler from './handler/keyboard';
 import type DoubleClickZoomHandler from './handler/dblclick_zoom';
 import type TouchZoomRotateHandler from './handler/touch_zoom_rotate';
@@ -63,7 +63,7 @@ type IControl = {
 }
 /* eslint-enable no-use-before-define */
 
-type MapOptions = {
+export type MapOptions = {
     hash?: boolean,
     interactive?: boolean,
     container: HTMLElement | string,
@@ -82,6 +82,7 @@ type MapOptions = {
     boxZoom?: boolean,
     dragRotate?: boolean,
     dragPan?: boolean,
+    dragPanOptions?: DragPanOptions,
     keyboard?: boolean,
     doubleClickZoom?: boolean,
     touchZoomRotate?: boolean,
@@ -192,6 +193,7 @@ const defaultOptions = {
  * @param {boolean} [options.boxZoom=true] If `true`, the "box zoom" interaction is enabled (see {@link BoxZoomHandler}).
  * @param {boolean} [options.dragRotate=true] If `true`, the "drag to rotate" interaction is enabled (see {@link DragRotateHandler}).
  * @param {boolean} [options.dragPan=true] If `true`, the "drag to pan" interaction is enabled (see {@link DragPanHandler}).
+ * @param {DragPanOptions} [options.dragPanOptions] Options passed to the {@link DragPanHandler} (see {@link DragPanOptions}).
  * @param {boolean} [options.keyboard=true] If `true`, keyboard shortcuts are enabled (see {@link KeyboardHandler}).
  * @param {boolean} [options.doubleClickZoom=true] If `true`, the "double click to zoom" interaction is enabled (see {@link DoubleClickZoomHandler}).
  * @param {boolean|Object} [options.touchZoomRotate=true] If `true`, the "pinch to rotate and zoom" interaction is enabled. An `Object` value is passed as options to {@link TouchZoomRotateHandler#enable}.
