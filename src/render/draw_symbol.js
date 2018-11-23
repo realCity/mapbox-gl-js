@@ -105,7 +105,7 @@ function drawLayerSymbols(painter, sourceCache, layer, coords, isText, translate
             tile.glyphAtlasTexture.bind(gl.LINEAR, gl.CLAMP_TO_EDGE);
             texSize = tile.glyphAtlasTexture.size;
         } else {
-            const iconScaleMatchesDevicePixelRatio = (layer.layout.get('icon-size').constantOr(0) - (1 / devicePixelRatio)) === 0;
+            const iconScaleMatchesDevicePixelRatio = layer.layout.get('icon-size').constantOr(0) === (1 / devicePixelRatio);
             const iconScaled = !iconScaleMatchesDevicePixelRatio || bucket.iconsNeedLinear;
             const iconTransformed = tr.pitch !== 0;
 
