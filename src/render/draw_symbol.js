@@ -257,7 +257,7 @@ function drawLayerSymbols(painter, sourceCache, layer, coords, isText, translate
         const isSDF = isText || bucket.sdfIcons;
 
         const sizeData = isText ? bucket.textSizeData : bucket.iconSizeData;
-        const transformed = pitchWithMap || tr.pitch !== 0;
+        const transformed = tr.pitch !== 0;
 
         if (!program) {
             program = painter.useProgram(getSymbolProgramName(isSDF, isText, bucket), programConfiguration);
