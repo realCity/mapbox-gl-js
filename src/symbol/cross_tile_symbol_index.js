@@ -170,11 +170,6 @@ class CrossTileSymbolLayerIndex {
             }
         }
 
-        for (let i = 0; i < bucket.symbolInstances.length; i++) {
-            const symbolInstance = bucket.symbolInstances.get(i);
-            symbolInstance.crossTileID = 0;
-        }
-
         if (!this.usedCrossTileIDs[tileID.overscaledZ]) {
             this.usedCrossTileIDs[tileID.overscaledZ] = {};
         }
