@@ -493,7 +493,7 @@ function addSymbol(bucket: SymbolBucket,
     let numHorizontalGlyphVertices = 0;
     let numVerticalGlyphVertices = 0;
     const placedTextSymbolIndices = {};
-    let key = murmur3('');
+    let key = murmur3(feature.id ? `${layer.id}.${feature.id}` : '');
     const radialTextOffset = (layer.layout.get('text-radial-offset').evaluate(feature, {}) || 0) * ONE_EM;
 
     for (const justification: any in shapedTextOrientations.horizontal) {
@@ -593,9 +593,10 @@ function addSymbol(bucket: SymbolBucket,
         numHorizontalGlyphVertices,
         numVerticalGlyphVertices,
         numIconVertices,
-        0,
+        key,
         textBoxScale,
-        radialTextOffset);
+        radialTextOffset
+    );
 }
 
 function anchorIsTooClose(bucket: any, text: string, repeatDistance: number, anchor: Point) {
