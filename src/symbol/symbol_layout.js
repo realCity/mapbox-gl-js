@@ -580,7 +580,7 @@ function addSymbol(bucket: SymbolBucket,
     let placedIconSymbolIndex = -1;
     let verticalPlacedIconSymbolIndex = -1;
     const placedTextSymbolIndices = {};
-    let key = murmur3('');
+    let key = murmur3(feature.id ? `${layer.id}.${feature.id}` : '');
 
     let textOffset0 = 0;
     let textOffset1 = 0;
@@ -745,9 +745,11 @@ function addSymbol(bucket: SymbolBucket,
         numIconVertices,
         numVerticalIconVertices,
         0,
+        key,
         textBoxScale,
         textOffset0,
-        textOffset1);
+        textOffset1
+    );
 }
 
 function anchorIsTooClose(bucket: any, text: string, repeatDistance: number, anchor: Point) {
