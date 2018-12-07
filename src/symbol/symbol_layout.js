@@ -358,7 +358,7 @@ function addSymbol(bucket: SymbolBucket,
     let numIconVertices = 0;
     let numGlyphVertices = 0;
     let numVerticalGlyphVertices = 0;
-    const key = murmur3(shapedTextOrientations.horizontal ? shapedTextOrientations.horizontal.text : '');
+    const key = murmur3(shapedTextOrientations.horizontal ? shapedTextOrientations.horizontal.text : feature.id ? `${layer.id}.${feature.id}` : '');
     const placedTextSymbolIndices = [];
     if (shapedTextOrientations.horizontal) {
         // As a collision approximation, we can use either the vertical or the horizontal version of the feature
@@ -438,7 +438,7 @@ function addSymbol(bucket: SymbolBucket,
         numGlyphVertices,
         numVerticalGlyphVertices,
         numIconVertices,
-        0);
+        key);
 }
 
 function anchorIsTooClose(bucket: any, text: string, repeatDistance: number, anchor: Point) {
